@@ -7,8 +7,8 @@
     <AssemblyTitle>RngSync</AssemblyTitle>
     <Product>RngSync</Product>
     <Description>Makes most rng consistent based on a given seed</Description>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
     <OutputPath>bin/$(Configuration)/</OutputPath>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <!-- Path to DLL references required to build mod -->
-    <LocalRefs></LocalRefs>
+    <LocalRefs>References</LocalRefs>
     <!-- Path to Mods folder -->
     <ModsPath>$(LocalRefs)/Mods</ModsPath>
     <!-- The folder that exports will be generated in -->
