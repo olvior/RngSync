@@ -61,6 +61,9 @@
     <!-- Exec Command="steam steam://rungameid/367520" / -->
   </Target>
   <ItemGroup>
+    <Reference Include="BingoSync">
+      <HintPath>$(LocalRefs)/Mods/BingoSync/BingoSync.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(LocalRefs)/Assembly-CSharp.dll</HintPath>
     </Reference>

@@ -14,6 +14,11 @@ class Generators
     public static Dictionary<int, System.Random> randoms = new Dictionary<int, System.Random>();
     public static string seed = "1234";
 
+    public static void ResetRng()
+    {
+        randoms = new Dictionary<int, System.Random>();
+    }
+
     public static System.Random GetRandom(GameObject go)
     {
         int hashCode = (seed + go.name + GameManager.instance.sceneName).GetHashCode();

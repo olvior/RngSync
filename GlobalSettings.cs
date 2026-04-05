@@ -2,6 +2,6 @@ namespace RngSync;
 
 public class GlobalSettings
 {
-    public string RngSeedOrBlankForRandom = "";
+    public string RngSeedOverride = "";
 }
 

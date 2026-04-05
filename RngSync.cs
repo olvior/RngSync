@@ -30,6 +30,16 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
     public override void Initialize()
     {
         Instance = this;
+
+        try
+        {
+            SetupBingoSyncHook();
+        }
+        catch
+        {
+            Log("No bingosync detected");
+        }
+
         On.HutongGames.PlayMaker.Actions.RandomFloat.OnEnter += RngHooks.RandomFloat_OnEnter;
         On.HutongGames.PlayMaker.Actions.RandomFloatV2.Randomise += RngHooks.RandomFloatV2_Randomise;
         On.HutongGames.PlayMaker.Actions.WaitRandom.OnEnter += RngHooks.WaitRandom_OnEnter;
@@ -42,8 +52,7 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
 
         Log("Initialised the hooks");
 
-
-        string seed = GS.RngSeedOrBlankForRandom;
+        string seed = GS.RngSeedOverride;
         if (seed == "")
         {
             seed = $"{Guid.NewGuid().GetHashCode()}";
@@ -51,6 +60,35 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
         }
         Log($"Seed is {seed}");
         Generators.seed = seed;
+    }
+
+    public void SetupBingoSyncHook()
+    {
+        BingoSync.Interfaces.OrderedLoader.OnDefaultSessionReady += OnDefaultSessionReady;
+        Log("Bingosync hook initialised");
+    }
+
+    public void OnDefaultSessionReady(object _, object __)
+    {
+        BingoSync.Interfaces.SessionManager.OnSessionChanged += OnNewSession;
+        OnNewSession(null, null);
+    }
+
+    public void OnNewSession(object _, BingoSync.Sessions.Session __)
+    {
+        Log("New session detected");
+        if (GS.RngSeedOverride == "")
+        {
+            BingoSync.Interfaces.SessionManager.GetActiveSession().OnNewCardReceived += ResetSeed;
+        }
+    }
+
+    public void ResetSeed(object _, BingoSync.Clients.EventInfoObjects.NewCardEventInfo info)
+    {
+        string seed = $"{info.Timestamp.GetHashCode()}";
+        Generators.ResetRng();
+        Generators.seed = seed;
+        Log($"Seed was set to {seed}");
     }
 }
 
