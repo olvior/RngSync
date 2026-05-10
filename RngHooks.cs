@@ -11,6 +11,8 @@ namespace RngSync;
 
 class RngHooks
 {
+    public static GameObject goRemember = null;
+
     public static void RandomFloat_OnEnter(On.HutongGames.PlayMaker.Actions.RandomFloat.orig_OnEnter orig, RandomFloat self)
     {
         GameObject go = self.Owner;
@@ -104,6 +106,50 @@ class RngHooks
         }
         self.Finish();
     }
+
+    public static void IdleBuzz_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzz.orig_DoBuzz orig, IdleBuzz self)
+    {
+        GameObject go = self.Owner;
+        goRemember = go;
+
+        orig(self);
+
+        goRemember = null;
+    }
+
+    public static void IdleBuzzV2_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzzV2.orig_DoBuzz orig, IdleBuzzV2 self)
+    {
+        GameObject go = self.Owner;
+        goRemember = go;
+
+        orig(self);
+        RngSync.Instance.Log("v2 cook");
+
+        goRemember = null;
+    }
+
+    public static void IdleBuzzV3_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzzV3.orig_DoBuzz orig, IdleBuzzV3 self)
+    {
+        GameObject go = self.Owner;
+        goRemember = go;
+
+        orig(self);
+        RngSync.Instance.Log("v3 cook");
+
+        goRemember = null;
+    }
+
+    public static float UnityEngine_Random_Range(float minInclusive, float maxInclusive)
+    {
+        if (goRemember != null)
+        {
+            return Generators.GetRandomRange(goRemember, minInclusive, maxInclusive);
+        }
+        else
+        {
+            // just give GameManager object if none in particular is present
+            return Generators.GetRandomRange(GameManager.instance.gameObject, minInclusive, maxInclusive);
+        }
+    }
 }
 
-// todo: DistanceWalk, FlingFlashingGeo, FireAtTarget, IdleBuzzV3, IdleBuzzV2, IdleBuzz, WalkLeftRight,

@@ -50,6 +50,15 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
         On.HutongGames.PlayMaker.Actions.RandomInt.OnEnter += RngHooks.RandomInt_OnEnter;
         On.HutongGames.PlayMaker.Actions.RandomlyFlipFloat.OnEnter += RngHooks.RandomlyFlipFloat_OnEnter;
 
+        On.HutongGames.PlayMaker.Actions.IdleBuzz.DoBuzz += RngHooks.IdleBuzz_DoBuzz;
+        On.HutongGames.PlayMaker.Actions.IdleBuzzV2.DoBuzz += RngHooks.IdleBuzzV2_DoBuzz;
+        On.HutongGames.PlayMaker.Actions.IdleBuzzV3.DoBuzz += RngHooks.IdleBuzzV3_DoBuzz;
+
+        new NativeDetour(
+                typeof(UnityEngine.Random).GetMethod("Range", new Type[] { typeof(float), typeof(float) }),
+                typeof(RngHooks).GetMethod(nameof(RngHooks.UnityEngine_Random_Range)));
+
+
         Log("Initialised the hooks");
 
         string seed = GS.RngSeedOverride;
