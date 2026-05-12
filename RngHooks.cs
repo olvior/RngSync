@@ -109,33 +109,43 @@ class RngHooks
 
     public static void IdleBuzz_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzz.orig_DoBuzz orig, IdleBuzz self)
     {
-        GameObject go = self.Owner;
-        goRemember = go;
-
+        goRemember = self.Owner;
         orig(self);
-
         goRemember = null;
     }
 
     public static void IdleBuzzV2_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzzV2.orig_DoBuzz orig, IdleBuzzV2 self)
     {
-        GameObject go = self.Owner;
-        goRemember = go;
-
+        goRemember = self.Owner;
         orig(self);
-        RngSync.Instance.Log("v2 cook");
-
         goRemember = null;
     }
 
     public static void IdleBuzzV3_DoBuzz(On.HutongGames.PlayMaker.Actions.IdleBuzzV3.orig_DoBuzz orig, IdleBuzzV3 self)
     {
-        GameObject go = self.Owner;
-        goRemember = go;
-
+        goRemember = self.Owner;
         orig(self);
-        RngSync.Instance.Log("v3 cook");
+        goRemember = null;
+    }
 
+    public static void FireAtTarget_DoSetVelocity(On.HutongGames.PlayMaker.Actions.FireAtTarget.orig_DoSetVelocity orig, FireAtTarget self)
+    {
+        goRemember = self.Owner;
+        orig(self);
+        goRemember = null;
+    }
+
+    public static void WalkLeftRight_SetupStartingDirection(On.HutongGames.PlayMaker.Actions.WalkLeftRight.orig_SetupStartingDirection orig, WalkLeftRight self)
+    {
+        goRemember = self.Owner;
+        orig(self);
+        goRemember = null;
+    }
+
+    public static void ChaseObject_DoBuzz(On.HutongGames.PlayMaker.Actions.ChaseObject.orig_DoBuzz orig, ChaseObject self)
+    {
+        goRemember = self.Owner;
+        orig(self);
         goRemember = null;
     }
 

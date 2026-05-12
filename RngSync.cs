@@ -53,6 +53,9 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
         On.HutongGames.PlayMaker.Actions.IdleBuzz.DoBuzz += RngHooks.IdleBuzz_DoBuzz;
         On.HutongGames.PlayMaker.Actions.IdleBuzzV2.DoBuzz += RngHooks.IdleBuzzV2_DoBuzz;
         On.HutongGames.PlayMaker.Actions.IdleBuzzV3.DoBuzz += RngHooks.IdleBuzzV3_DoBuzz;
+        On.HutongGames.PlayMaker.Actions.FireAtTarget.DoSetVelocity += RngHooks.FireAtTarget_DoSetVelocity;
+        On.HutongGames.PlayMaker.Actions.WalkLeftRight.SetupStartingDirection += RngHooks.WalkLeftRight_SetupStartingDirection;
+        On.HutongGames.PlayMaker.Actions.ChaseObject.DoBuzz += RngHooks.ChaseObject_DoBuzz;
 
         new NativeDetour(
                 typeof(UnityEngine.Random).GetMethod("Range", new Type[] { typeof(float), typeof(float) }),
