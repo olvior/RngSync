@@ -92,7 +92,46 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
         if (GS.RngSeedOverride == "")
         {
             BingoSync.Interfaces.SessionManager.GetActiveSession().OnNewCardReceived += ResetSeed;
+            BingoSync.Interfaces.SessionManager.GetActiveSession().OnClientStateChanged += NewState;
         }
+        else
+        {
+            Log("Rng seed is overwritten, not using BingoSync integration");
+        }
+    }
+
+    public void NewState(object _, BingoSync.Clients.EventInfoObjects.ClientStateUpdateInfo info)
+    {
+        if (info.NewClientState == BingoSync.Clients.ClientState.Connected)
+        {
+            BingoSync.Interfaces.SessionManager.GetActiveSession().ProcessRoomHistory(RoomStateCallback, RoomStateErr);
+        }
+    }
+
+    public void RoomStateCallback(List<BingoSync.Clients.EventInfoObjects.RoomEventInfo> infos)
+    {
+        BingoSync.Clients.EventInfoObjects.NewCardEventInfo newCard = null;
+        foreach (var i in infos)
+        {
+            if (i is BingoSync.Clients.EventInfoObjects.NewCardEventInfo)
+            {
+                newCard = (BingoSync.Clients.EventInfoObjects.NewCardEventInfo)i;
+            }
+        }
+
+        if (newCard != null)
+        {
+            ResetSeed(null, newCard);
+        }
+        else
+        {
+            Log("No NewCardEventInfo found in room history");
+        }
+    }
+
+    public void RoomStateErr()
+    {
+        Log("Not able to process room history!");
     }
 
     public void ResetSeed(object _, BingoSync.Clients.EventInfoObjects.NewCardEventInfo info)
