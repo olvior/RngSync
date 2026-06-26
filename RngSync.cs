@@ -67,7 +67,7 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
         string seed = GS.RngSeedOverride;
         if (seed == "")
         {
-            seed = $"{Guid.NewGuid().GetHashCode()}";
+            seed = Generators.HashString($"{Guid.NewGuid()}");
             Log($"Detected empty seed, using random one: {seed}");
         }
         Log($"Seed is {seed}");
@@ -136,7 +136,8 @@ internal class RngSync : Mod, IGlobalSettings<GlobalSettings>
 
     public void ResetSeed(object _, BingoSync.Clients.EventInfoObjects.NewCardEventInfo info)
     {
-        string seed = $"{info.Timestamp.GetHashCode()}";
+        string timestamp = $"{info.Timestamp}".Substring(0,11);
+        string seed = Generators.HashString(timestamp);
         Generators.ResetRng();
         Generators.seed = seed;
         Log($"Seed was set to {seed}");

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using UnityEngine;
@@ -21,7 +22,7 @@ class Generators
 
     public static System.Random GetRandom(GameObject go)
     {
-        int hashCode = (seed + go.name + GameManager.instance.sceneName).GetHashCode();
+        int hashCode = HashToInt(seed + go.name + GameManager.instance.sceneName);
 
         if (!randoms.ContainsKey(hashCode))
         {
@@ -42,7 +43,7 @@ class Generators
             weightsCombined += $"{f}";
         }
 
-        int hashCode = (seed + weightsCombined + GameManager.instance.sceneName).GetHashCode();
+        int hashCode = HashToInt(seed + weightsCombined + GameManager.instance.sceneName);
 
         if (!randoms.ContainsKey(hashCode))
         {
@@ -90,5 +91,20 @@ class Generators
             num2 -= weights[j].Value;
         }
         return -1;
+    }
+
+    public static string HashString(string s)
+    {
+        return $"{HashToInt(s)}";
+    }
+
+    public static int HashToInt(string s)
+    {
+        using (var sha = new System.Security.Cryptography.SHA256Managed())
+        {
+            byte[] strData = System.Text.Encoding.UTF8.GetBytes(s);
+            byte[] hash = sha.ComputeHash(strData);
+            return BitConverter.ToInt32(hash, 0);
+        }
     }
 }
